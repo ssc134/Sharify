@@ -1,23 +1,41 @@
 from flask import Flask, render_template, redirect, url_for
 import sqlite3
 
-available_id_connection = sqlite3.connect("Available_Ids.db")
-available_id_cursor = available_id_connection.cursor()
-
-unavailable_id_connection = sqlite3.connect("Unavailable_Ids.db")
-unavailable_id_cursor = unavailable_id_connection.cursor()
+"""
+ Unique_Ids.db has 2 tables named 'Used' and 'Unused'.
+ Tables 'Used' & 'Unused' have a common attribute 'id'.
+"""
 
 
 app = Flask(__name__)
 
-@app.route('/cat')
-def session():
-    return "hello world"
 
-@app.route('/')
+def generate_unique_id():
+    connection = sqlite3.connect("Unique_Ids.db")
+    cur = connection.cursor()
+    uid = cur.execute(" SELECT * FROM Unused LIMIT 1 ").fetchone()
+    cur.execute(" DELETE FROM Unused WHERE id=(?) ", uid)
+    connection.commit()
+    cur.execute(" INSERT INTO Used VALUES (?) ", uid)
+    connection.commit()
+    # DONT touch the below line. Haath modun thevil XD.
+    uid = uid[0].split("\n")[0]
+    connection.close()
+    return uid
+
+
+@app.route("/cat")
+@app.route("/<string:uid>")
+def session(uid):
+    return f"{uid} session loaded"
+
+
+@app.route("/")
 def homepage():
-    
-    return redirect("/cat")
+    uid = generate_unique_id()
+    print(uid)
+    return redirect(f"/{uid}")
 
-if __name__=='__main__':
+
+if __name__ == "__main__":
     app.run(debug=True)

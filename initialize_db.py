@@ -7,10 +7,10 @@ connection = sqlite3.connect("Unique_Ids.db")
 cur = connection.cursor()
 
 # Create a table named 'Used' for used ids.
-cur.execute("CREATE TABLE Used (Id TEXT NOT NULL PRIMARY KEY)")
+cur.execute("CREATE TABLE Used (id TEXT NOT NULL PRIMARY KEY)")
 
 # Create a table named 'Unused' for unused ids.
-cur.execute("CREATE TABLE Unused (Id TEXT NOT NULL PRIMARY KEY)")
+cur.execute("CREATE TABLE Unused (id TEXT NOT NULL PRIMARY KEY)")
 
 # Initialized the table 'Unused' with all the names.
 # Open file containing unique names and insert the names into table 'Unused'
