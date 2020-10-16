@@ -1,7 +1,9 @@
 import sqlite3
 
-conn = sqlite3.connect("Available_Ids.db")
-c = conn.cursor()
-c.execute("SELECT * from Available_Ids")
-print(c.fetchall())
-conn.close()
+connection = sqlite3.connect("Unique_Ids.db")
+cur = connection.cursor()
+cur.execute("SELECT * from Used LIMIT 5")
+print(cur.fetchall())
+cur.execute("SELECT * from Unused LIMIT 5")
+print(cur.fetchall())
+connection.close()

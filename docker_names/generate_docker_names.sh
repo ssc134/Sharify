@@ -5,7 +5,7 @@
 # generates new ones.
 
 containersToGenereate=1000
-writeToFile='docker_names.txt'
+writeToFile='unique_names.txt'
 
 touch $writeToFile
 

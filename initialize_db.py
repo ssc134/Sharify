@@ -1,25 +1,26 @@
 import sqlite3
 
-# Create a database named Unavailable_ids.db
-# and create a table in it named Unavailable_Ids
-# Then close the connection
-conn = sqlite3.connect("Unavailable_Ids.db")
-c = conn.cursor()
-c.execute("CREATE TABLE Unavailable_Ids (unique_name TEXT NOT NULL PRIMARY KEY)")
-conn.commit()
-conn.close()
+# Create and establish a connection with database Unique_Ids.db
+connection = sqlite3.connect("Unique_Ids.db")
 
-# Create a database named Available_ids.db
-# and create a table in it named Available_Ids.
-# Then copy ids from file docker_names.txt from folder generate_docker_names
-# and insert into Available_ids.db.
-# Lastly close the file and close the db connection.
-conn = sqlite3.connect("Available_Ids.db")
-c = conn.cursor()
-file = open("generate_docker_names/docker_names.txt")
-c.execute("CREATE TABLE Available_Ids (unique_name TEXT NOT NULL PRIMARY KEY )")
+# Get cursor for the connection
+cur = connection.cursor()
+
+# Create a table named 'Used' for used ids.
+cur.execute("CREATE TABLE Used (Id TEXT NOT NULL PRIMARY KEY)")
+
+# Create a table named 'Unused' for unused ids.
+cur.execute("CREATE TABLE Unused (Id TEXT NOT NULL PRIMARY KEY)")
+
+# Initialized the table 'Unused' with all the names.
+# Open file containing unique names and insert the names into table 'Unused'
+file = open("docker_names/unique_names.txt")
 for line in file:
-    c.execute(f"INSERT INTO Available_Ids VALUES ('{line}')")
-conn.commit()
+    cur.execute(f"INSERT INTO Unused VALUES ('{line}') ")
+
+# Commit to the database
+connection.commit()
+
+# Lastly close the file & the connection to the database.
 file.close()
-conn.close()
+connection.close()
